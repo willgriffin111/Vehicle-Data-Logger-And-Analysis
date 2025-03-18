@@ -3,12 +3,36 @@
 #include <Wire.h>
 #include <SPI.h>
 #include <ArduinoJson.h>
+#include <iostream>
+
 
 extern SdFat SD;  
 
 WebServer server(80);  
 bool deleteRecursively(const char* path);
 
+void createDummyFileIfNotExists() {
+    if (!SD.exists("/test/dummy.json")) {
+      Serial.println("Dummy file not found, creating it...");
+      FsFile file = SD.open("/test/dummy.json", O_WRITE | O_CREAT);
+      if (file) {
+        file.print(
+          "{\"gps\":{\"time\":\"16:09:32\",\"latitude\":REDACTED_LAT,\"longitude\":REDACTED_LON},\"obd\":{\"rpm\":0,\"speed\":0,\"maf\":0.94,\"instant_mpg\":0,\"throttle\":14,\"avg_mpg\":0},\"imu\":{\"accel_x\":-19,\"accel_y\":-4}}\n"
+          "{\"gps\":{\"time\":\"16:09:35\",\"latitude\":REDACTED_LAT,\"longitude\":REDACTED_LON},\"obd\":{\"rpm\":217,\"speed\":0,\"maf\":2.97,\"instant_mpg\":0,\"throttle\":14,\"avg_mpg\":0},\"imu\":{\"accel_x\":3,\"accel_y\":0}}\n"
+          "{\"gps\":{\"time\":\"16:09:38\",\"latitude\":REDACTED_LAT,\"longitude\":REDACTED_LON},\"obd\":{\"rpm\":772,\"speed\":0,\"maf\":8.33,\"instant_mpg\":0,\"throttle\":14,\"avg_mpg\":0},\"imu\":{\"accel_x\":1,\"accel_y\":3}}\n"
+          "{\"gps\":{\"time\":\"16:09:41\",\"latitude\":REDACTED_LAT,\"longitude\":REDACTED_LON},\"obd\":{\"rpm\":778,\"speed\":0,\"maf\":8.16,\"instant_mpg\":0,\"throttle\":14,\"avg_mpg\":0},\"imu\":{\"accel_x\":-1,\"accel_y\":0}}"
+        );
+        file.close();
+        Serial.println("Dummy file created.");
+      } else {
+        Serial.println("Failed to create dummy file.");
+      }
+    } else {
+      Serial.println("Dummy file already exists.");
+    }
+  }
+
+  
 void handleRoot() {
     server.sendHeader("Access-Control-Allow-Origin", "*");
     server.send(200, "text/plain", "Connected");
@@ -384,7 +408,9 @@ void handleDeleteOptions() {
 
 void setupServer() {
     Serial.println("Setting up Web Server...");
-    
+
+    createDummyFileIfNotExists();
+
     server.on("/", HTTP_GET, handleRoot);
     server.on("/days", HTTP_GET, handleDays);
     server.on("/drives", HTTP_GET, handleDrives);

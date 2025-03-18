@@ -13,8 +13,8 @@
 #define SD_CS_PIN A0   
 #define DEBUG true
 
-#define BUTTON_PIN A1      
-#define LED_PIN    A2    
+#define BUTTON_PIN A2      
+#define LED_PIN    A1  
 
 
 // WiFi Access Point Credentials
@@ -148,7 +148,7 @@ void dataTask(void *pvParameters) {
                 if (firstLog) {
                     sprintf(folderName, "%04d-%02d-%02d", year, month, day);
                     if (!SD.exists(folderName)) SD.mkdir(folderName);
-                    sprintf(fileName, "%s/%02d-%02d.json", folderName, hour, minute);
+                    sprintf(fileName, "%s/%02d-%02d-%02d.json", folderName, hour, minute, second);
                     logFile = SD.open(fileName, O_RDWR | O_CREAT | O_AT_END);
                     if (logFile) {
                         Serial.printf("Log file created: %s\n", fileName);
