@@ -23,10 +23,12 @@
      * Disable this if you'd like to use dynamic types.
      */
     "checkJs": true
+    
   },
   /**
    * Use global.d.ts instead of compilerOptions.types
    * to avoid limiting type declarations.
    */
-  "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.svelte", "public/data.json"]
+  "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.svelte", "public/data.json"],
+  "exclude": ["node_modules"]
 }

@@ -266,6 +266,8 @@
     }).addTo(map);
   });
 
+
+
   // Whenever routeData changes, update map overlays and charts.
   $: if (routeData.length) {
     updateRouteLine();
