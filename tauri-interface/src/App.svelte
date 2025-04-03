@@ -5,6 +5,16 @@
   import Chart from "chart.js/auto";
   import { confirm } from '@tauri-apps/plugin-dialog';
 
+
+  
+ // Fixes icon issue when build 
+  delete L.Icon.Default.prototype._getIconUrl;
+
+  L.Icon.Default.mergeOptions({
+  iconRetinaUrl: "/marker-icon-2x.png",
+  iconUrl: "/marker-icon.png",
+  shadowUrl: "/marker-shadow.png"
+});
   let map;
   let routeData = [];
   let markers = [];
